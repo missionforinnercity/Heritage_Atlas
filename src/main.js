@@ -12,33 +12,39 @@ const app = document.querySelector('#app');
 app.innerHTML = `
   <div class="app-shell">
     <div id="map" class="map-canvas"></div>
-    <div class="dot-grid" aria-hidden="true"></div>
 
     <header class="topbar">
       <div class="title-wrap">
-        <p class="kicker">Inner City Cape Town</p>
+        <p class="kicker">Mission For Inner City</p>
         <h1>Heritage Atlas</h1>
       </div>
-
       <div class="actions">
         <div class="view-switch" id="viewSwitch">
-          <button class="view-btn active" data-view="map">Map</button>
-          <button class="view-btn" data-view="trends">Trends</button>
+          <button class="view-btn active" data-view="trends">Dashboard</button>
+          <button class="view-btn" data-view="map">Map</button>
         </div>
-        <input id="searchInput" type="search" placeholder="Search buildings, streets, heritage notes" />
-        <button id="styleToggle" class="pill-btn">Satellite</button>
+        <button id="styleToggle" class="pill-btn">Dark Map</button>
       </div>
     </header>
 
     <aside class="dock">
+      <label class="field search-field">
+        <span>Search</span>
+        <input id="searchInput" type="search" placeholder="Buildings, streets, notes" />
+      </label>
+
       <div class="filter-row">
-        <label>
+        <label class="field">
           <span>Usage</span>
           <select id="usageFilter"></select>
         </label>
-        <label>
+        <label class="field">
           <span>Zoning</span>
           <select id="zoningFilter"></select>
+        </label>
+        <label class="field">
+          <span>Heritage Grade</span>
+          <select id="heritageGradeFilter"></select>
         </label>
       </div>
 
@@ -50,15 +56,17 @@ app.innerHTML = `
       </div>
     </aside>
 
-    <main id="trendsView" class="trends-view hidden">
+    <main id="trendsView" class="trends-view">
       <section class="trend-cards" id="trendCards"></section>
-      <section class="trend-panel">
+
+      <section class="trend-panel chart-panel">
         <header>
           <h3>Size vs Value</h3>
           <p>ERF size compared with municipal value.</p>
         </header>
         <div id="sizeValueChart" class="chart-wrap"></div>
       </section>
+
       <section class="trend-panel">
         <header>
           <h3>Pricing Leaderboard</h3>
@@ -87,6 +95,7 @@ app.innerHTML = `
 const searchInput = document.querySelector('#searchInput');
 const usageFilter = document.querySelector('#usageFilter');
 const zoningFilter = document.querySelector('#zoningFilter');
+const heritageGradeFilter = document.querySelector('#heritageGradeFilter');
 const siteList = document.querySelector('#siteList');
 const stats = document.querySelector('#stats');
 const detailCard = document.querySelector('#detailCard');
@@ -96,6 +105,7 @@ const viewSwitch = document.querySelector('#viewSwitch');
 const trendCards = document.querySelector('#trendCards');
 const sizeValueChart = document.querySelector('#sizeValueChart');
 const pricingTableBody = document.querySelector('#pricingTableBody');
+const mapContainer = document.querySelector('#map');
 
 const state = {
   data: null,
@@ -104,37 +114,31 @@ const state = {
   search: '',
   usage: 'all',
   zoning: 'all',
-  styleKey: 'dark',
-  view: 'map',
+  heritageGrade: 'all',
+  styleKey: 'light',
+  view: 'trends',
 };
 
 const styles = {
+  light: 'mapbox://styles/mapbox/light-v11',
   dark: 'mapbox://styles/mapbox/dark-v11',
-  satellite: 'mapbox://styles/mapbox/satellite-streets-v12',
+  satellite3d: 'mapbox://styles/mapbox/satellite-streets-v12',
 };
+const styleOrder = ['light', 'dark', 'satellite3d'];
 
 const METRIC_OVERRIDES = new Map([
-  [
-    'tobacco mini market|93 loop street',
-    { size: 453, value: 16000000 },
-  ],
-  [
-    '121 long salon|121 long st',
-    { size: 64, value: 7500000 },
-  ],
-  [
-    'langham house|59 long st',
-    { size: 190, value: 12850000 },
-  ],
+  ['tobacco mini market|93 loop street', { size: 453, value: 16000000 }],
+  ['121 long salon|121 long st', { size: 64, value: 7500000 }],
+  ['langham house|59 long st', { size: 190, value: 12850000 }],
 ]);
 
 const map = new mapboxgl.Map({
   container: 'map',
-  style: styles.dark,
+  style: styles.light,
   center: [18.4233, -33.9189],
   zoom: 14,
-  pitch: 52,
-  bearing: -12,
+  pitch: 0,
+  bearing: 0,
   attributionControl: false,
   antialias: true,
 });
@@ -143,7 +147,7 @@ map.addControl(new mapboxgl.NavigationControl({ visualizePitch: true }), 'bottom
 map.addControl(new mapboxgl.AttributionControl({ compact: true }), 'bottom-left');
 
 async function loadData() {
-  const response = await fetch('/data/heritage.geojson');
+  const response = await fetch(`/data/heritage.geojson?t=${Date.now()}`, { cache: 'no-store' });
   if (!response.ok) throw new Error('Could not load heritage.geojson');
   state.data = await response.json();
 }
@@ -215,7 +219,11 @@ function formatCurrency(value) {
 
 function formatNumber(value, digits = 0) {
   if (!Number.isFinite(value)) return 'N/A';
-  return new Intl.NumberFormat('en-ZA', { maximumFractionDigits: digits }).format(value);
+  return new Intl.NumberFormat('en-ZA', {
+    maximumFractionDigits: digits,
+    minimumFractionDigits: digits > 0 ? digits : 0,
+    useGrouping: true,
+  }).format(value);
 }
 
 function keyForOverride(name, address) {
@@ -237,6 +245,7 @@ function applyFilters() {
 
     if (state.usage !== 'all' && p.usage !== state.usage) return false;
     if (state.zoning !== 'all' && p.zoning !== state.zoning) return false;
+    if (state.heritageGrade !== 'all' && p.heritageCityGrade !== state.heritageGrade) return false;
 
     if (!search) return true;
     const haystack = [p.name, p.address, p.significance, p.owner, p.usage, p.zoning]
@@ -264,22 +273,8 @@ function addDataLayers() {
       type: 'geojson',
       data: currentCollection(),
       cluster: true,
-      clusterRadius: 55,
+      clusterRadius: 46,
       clusterMaxZoom: 14,
-    });
-  }
-
-  if (!map.getLayer('cluster-halo')) {
-    map.addLayer({
-      id: 'cluster-halo',
-      type: 'circle',
-      source: 'heritage',
-      filter: ['has', 'point_count'],
-      paint: {
-        'circle-color': 'rgba(255, 77, 41, 0.2)',
-        'circle-radius': ['step', ['get', 'point_count'], 24, 10, 32, 25, 40],
-        'circle-blur': 0.5,
-      },
     });
   }
 
@@ -290,10 +285,10 @@ function addDataLayers() {
       source: 'heritage',
       filter: ['has', 'point_count'],
       paint: {
-        'circle-color': ['step', ['get', 'point_count'], '#ff4d29', 10, '#ff6749', 25, '#ff8368'],
-        'circle-radius': ['step', ['get', 'point_count'], 17, 10, 22, 25, 27],
-        'circle-stroke-color': '#0a0b0f',
-        'circle-stroke-width': 1.5,
+        'circle-color': ['step', ['get', 'point_count'], '#f25734', 10, '#d94f30', 25, '#bc472c'],
+        'circle-radius': ['step', ['get', 'point_count'], 15, 10, 20, 25, 25],
+        'circle-stroke-width': 2,
+        'circle-stroke-color': '#111111',
       },
     });
   }
@@ -310,7 +305,7 @@ function addDataLayers() {
         'text-size': 11,
       },
       paint: {
-        'text-color': '#11121a',
+        'text-color': '#111111',
       },
     });
   }
@@ -322,24 +317,10 @@ function addDataLayers() {
       source: 'heritage',
       filter: ['!', ['has', 'point_count']],
       paint: {
-        'circle-color': '#c7c9d4',
+        'circle-color': '#111111',
         'circle-radius': 5.5,
-        'circle-stroke-width': 1.3,
-        'circle-stroke-color': '#0f1118',
-      },
-    });
-  }
-
-  if (!map.getLayer('selected-halo')) {
-    map.addLayer({
-      id: 'selected-halo',
-      type: 'circle',
-      source: 'heritage',
-      filter: ['==', ['get', 'id'], ''],
-      paint: {
-        'circle-color': 'rgba(58, 109, 255, 0.28)',
-        'circle-radius': 18,
-        'circle-blur': 0.45,
+        'circle-stroke-width': 2,
+        'circle-stroke-color': '#f2f2f7',
       },
     });
   }
@@ -351,16 +332,82 @@ function addDataLayers() {
       source: 'heritage',
       filter: ['==', ['get', 'id'], ''],
       paint: {
-        'circle-color': '#3a6dff',
-        'circle-radius': 7,
+        'circle-color': '#f25734',
+        'circle-radius': 8,
         'circle-stroke-width': 2,
-        'circle-stroke-color': '#f5f7ff',
+        'circle-stroke-color': '#111111',
       },
     });
   }
 
   bindLayerInteractions();
   updateSelectedLayer();
+}
+
+function ensure3DContext() {
+  if (!map.getSource('mapbox-dem')) {
+    map.addSource('mapbox-dem', {
+      type: 'raster-dem',
+      url: 'mapbox://mapbox.mapbox-terrain-dem-v1',
+      tileSize: 512,
+      maxzoom: 14,
+    });
+  }
+
+  map.setTerrain({ source: 'mapbox-dem', exaggeration: 1.15 });
+  map.setFog({
+    range: [-0.2, 2],
+    color: '#ffffff',
+    'high-color': '#f2f2f7',
+    'space-color': '#e3e3e3',
+    'horizon-blend': 0.12,
+  });
+
+  if (!map.getLayer('3d-buildings')) {
+    const layers = map.getStyle().layers || [];
+    const labelLayer = layers.find((layer) => layer.type === 'symbol' && layer.layout && layer.layout['text-field']);
+    const beforeId = labelLayer ? labelLayer.id : undefined;
+
+    map.addLayer(
+      {
+        id: '3d-buildings',
+        source: 'composite',
+        'source-layer': 'building',
+        filter: ['==', ['get', 'extrude'], 'true'],
+        type: 'fill-extrusion',
+        minzoom: 14,
+        paint: {
+          'fill-extrusion-color': '#d7d9df',
+          'fill-extrusion-height': ['interpolate', ['linear'], ['zoom'], 14, 0, 16, ['get', 'height']],
+          'fill-extrusion-base': ['interpolate', ['linear'], ['zoom'], 14, 0, 16, ['get', 'min_height']],
+          'fill-extrusion-opacity': 0.72,
+        },
+      },
+      beforeId,
+    );
+  }
+
+  map.easeTo({ pitch: 58, bearing: -20, duration: 900 });
+}
+
+function applyMapPresentation() {
+  if (state.styleKey === 'satellite3d') {
+    ensure3DContext();
+    return;
+  }
+
+  map.setTerrain(null);
+  map.setFog(null);
+  map.easeTo({ pitch: 0, bearing: 0, duration: 600 });
+}
+
+function updateStyleToggleLabel() {
+  styleToggle.textContent =
+    state.styleKey === 'light'
+      ? 'Dark Map'
+      : state.styleKey === 'dark'
+        ? 'Satellite 3D'
+        : 'Light Map';
 }
 
 function bindLayerInteractions() {
@@ -406,18 +453,9 @@ function renderStats() {
   const missingCoords = state.data.skippedRows || 0;
 
   stats.innerHTML = `
-    <div class="stat-card">
-      <small>Visible</small>
-      <strong>${shown}</strong>
-    </div>
-    <div class="stat-card">
-      <small>Total</small>
-      <strong>${total}</strong>
-    </div>
-    <div class="stat-card">
-      <small>Missing GPS</small>
-      <strong>${missingCoords}</strong>
-    </div>
+    <div class="stat-card"><small>Visible</small><strong>${shown}</strong></div>
+    <div class="stat-card"><small>Total</small><strong>${total}</strong></div>
+    <div class="stat-card"><small>Missing GPS</small><strong>${missingCoords}</strong></div>
   `;
 }
 
@@ -466,12 +504,7 @@ function getMetricsRows() {
 function renderTrendCards(rows) {
   const sizedRows = rows.filter((row) => Number.isFinite(row.size) && row.size > 0 && row.size < 20000);
   const usable = rows.filter(
-    (row) =>
-      Number.isFinite(row.size) &&
-      row.size > 0 &&
-      row.size < 20000 &&
-      Number.isFinite(row.value) &&
-      row.value > 0,
+    (row) => Number.isFinite(row.size) && row.size > 0 && row.size < 20000 && Number.isFinite(row.value) && row.value > 0,
   );
 
   const totalValue = usable.reduce((acc, row) => acc + row.value, 0);
@@ -493,78 +526,75 @@ function renderTrendCards(rows) {
 
 function renderSizeValueChart(rows) {
   const points = rows.filter(
-    (row) =>
-      Number.isFinite(row.size) &&
-      row.size > 0 &&
-      row.size < 20000 &&
-      Number.isFinite(row.value) &&
-      row.value > 0,
+    (row) => Number.isFinite(row.size) && row.size > 0 && row.size < 20000 && Number.isFinite(row.value) && row.value > 0,
   );
+
   if (!points.length) {
     sizeValueChart.innerHTML = '<p class="empty">No size/value records in current filter.</p>';
     return;
   }
 
-  const width = 620;
-  const height = 270;
-  const pad = { top: 20, right: 16, bottom: 30, left: 58 };
-  const maxX = Math.max(...points.map((point) => point.size));
-  const maxY = Math.max(...points.map((point) => point.value));
-  const minX = Math.min(...points.map((point) => point.size));
-  const minY = Math.min(...points.map((point) => point.value));
+  const width = 720;
+  const height = 360;
+  const pad = { top: 32, right: 24, bottom: 58, left: 76 };
+
+  const maxX = Math.max(...points.map((p) => p.size));
+  const maxY = Math.max(...points.map((p) => p.value));
+  const minX = Math.min(...points.map((p) => p.size));
+  const minY = Math.min(...points.map((p) => p.value));
 
   const xMin = Math.max(0, minX * 0.9);
-  const xMax = maxX * 1.1;
+  const xMax = maxX * 1.08;
   const yMin = Math.max(0, minY * 0.9);
-  const yMax = maxY * 1.1;
+  const yMax = maxY * 1.08;
 
   const x = (value) => pad.left + ((value - xMin) / (xMax - xMin || 1)) * (width - pad.left - pad.right);
-  const y = (value) =>
-    height - pad.bottom - ((value - yMin) / (yMax - yMin || 1)) * (height - pad.top - pad.bottom);
+  const y = (value) => height - pad.bottom - ((value - yMin) / (yMax - yMin || 1)) * (height - pad.top - pad.bottom);
 
-  const xTickCount = 5;
-  const yTickCount = 4;
-  const xTicks = Array.from({ length: xTickCount }, (_, index) => xMin + (index / (xTickCount - 1)) * (xMax - xMin));
-  const yTicks = Array.from({ length: yTickCount }, (_, index) => yMin + (index / (yTickCount - 1)) * (yMax - yMin));
+  const gridPitch = 14;
+  const dotGrid = [];
+  for (let yy = pad.top; yy <= height - pad.bottom; yy += gridPitch) {
+    for (let xx = pad.left; xx <= width - pad.right; xx += gridPitch) {
+      dotGrid.push(`<circle class="bg-dot" cx="${xx}" cy="${yy}" r="1.4" />`);
+    }
+  }
 
-  const vGrid = xTicks
-    .map((tick) => {
+  const xTicks = [xMin, xMin + (xMax - xMin) / 2, xMax];
+  const yTicks = [yMin, yMin + (yMax - yMin) / 2, yMax];
+
+  const xTickLabels = xTicks
+    .map((tick, i) => {
       const xx = x(tick);
-      return `
-        <line class="grid-line" x1="${xx}" y1="${pad.top}" x2="${xx}" y2="${height - pad.bottom}" />
-        <text class="tick-label x-tick" x="${xx}" y="${height - 10}">${formatNumber(tick)}</text>
-      `;
+      const isLast = i === xTicks.length - 1;
+      return `<text class="tick-label x-tick" x="${xx}" y="${height - 30}">${isLast ? '' : formatNumber(tick)}</text>`;
     })
     .join('');
 
-  const hGrid = yTicks
+  const yTickLabels = yTicks
     .map((tick) => {
       const yy = y(tick);
-      return `
-        <line class="grid-line" x1="${pad.left}" y1="${yy}" x2="${width - pad.right}" y2="${yy}" />
-        <text class="tick-label y-tick" x="${pad.left - 8}" y="${yy + 3}">${formatNumber(tick / 1000000, 1)}M</text>
-      `;
+      return `<text class="tick-label y-tick" x="${pad.left - 10}" y="${yy + 3}">${formatNumber(tick / 1000000, 1)}M</text>`;
     })
     .join('');
 
-  const circles = points
-    .map(
-      (point) => {
-        const radius = 5.8;
-        return `<circle cx="${x(point.size).toFixed(2)}" cy="${y(point.value).toFixed(2)}" r="${radius}"><title>${point.name}: ${formatNumber(point.size)} m2 | ${formatCurrency(point.value)}</title></circle>`;
-      },
-    )
+  const pointMarks = points
+    .map((point) => {
+      const cx = x(point.size);
+      const cy = y(point.value);
+      return `<g><circle class="point" cx="${cx}" cy="${cy}" r="6"></circle><title>${point.name}: ${formatNumber(point.size)} m2 | ${formatCurrency(point.value)}</title></g>`;
+    })
     .join('');
 
   sizeValueChart.innerHTML = `
-    <svg viewBox="0 0 ${width} ${height}" preserveAspectRatio="none" aria-label="ERF size and value chart">
-      ${hGrid}
-      ${vGrid}
+    <svg viewBox="0 0 ${width} ${height}" preserveAspectRatio="xMidYMid meet" aria-label="ERF size and value chart">
+      ${dotGrid.join('')}
       <line class="axis-line" x1="${pad.left}" y1="${height - pad.bottom}" x2="${width - pad.right}" y2="${height - pad.bottom}" />
       <line class="axis-line" x1="${pad.left}" y1="${pad.top}" x2="${pad.left}" y2="${height - pad.bottom}" />
-      ${circles}
-      <text class="axis-label" x="${pad.left}" y="${pad.top - 8}">Value (ZAR)</text>
-      <text class="axis-label" x="${width - pad.right - 92}" y="${height - 8}">ERF Size (m2)</text>
+      ${xTickLabels}
+      ${yTickLabels}
+      ${pointMarks}
+      <text class="axis-label" x="${pad.left}" y="${pad.top - 14}">VALUE (ZAR)</text>
+      <text class="axis-label x-axis-label" x="${width - pad.right}" y="${height - 12}">ERF SIZE (M2)</text>
     </svg>
   `;
 }
@@ -610,9 +640,6 @@ function updateSelectedLayer() {
   if (map.getLayer('selected-point')) {
     map.setFilter('selected-point', ['==', ['get', 'id'], targetId]);
   }
-  if (map.getLayer('selected-halo')) {
-    map.setFilter('selected-halo', ['==', ['get', 'id'], targetId]);
-  }
 }
 
 function syncDetailCard() {
@@ -629,7 +656,6 @@ function syncDetailCard() {
   detailCard.innerHTML = `
     <h2>${p.name || 'Unnamed site'}</h2>
     <p class="address">${p.address || 'No address listed'}</p>
-
     <dl>
       <div><dt>Usage</dt><dd>${p.usage || 'N/A'}</dd></div>
       <div><dt>Zoning</dt><dd>${p.zoning || 'N/A'}</dd></div>
@@ -638,9 +664,13 @@ function syncDetailCard() {
       <div><dt>Municipal Value</dt><dd>${p.cmaMunicipalValue2023 || p.estValue || 'N/A'}</dd></div>
       <div><dt>Rates Est.</dt><dd>${p.cmaRatesEstimate || 'N/A'}</dd></div>
       <div><dt>Owner</dt><dd>${p.owner || 'N/A'}</dd></div>
+      <div><dt>City Grade</dt><dd>${p.heritageCityGrade || 'N/A'}</dd></div>
+      <div><dt>Council Grade</dt><dd>${p.heritageCouncilGrade || 'N/A'}</dd></div>
+      <div><dt>NHRA Status</dt><dd>${p.nhraStatus || 'N/A'}</dd></div>
+      <div><dt>Heritage Source</dt><dd>${p.heritageAddress || 'N/A'}</dd></div>
+      <div><dt>Match Method</dt><dd>${p.heritageMatchMethod || 'N/A'}${p.heritageMatchConfidence ? ` (${p.heritageMatchConfidence})` : ''}</dd></div>
     </dl>
-
-    <p class="sig">${p.significance || 'No significance text available.'}</p>
+    <p class="sig">${p.heritageStatement || p.significance || 'No significance text available.'}</p>
   `;
 
   updateSelectedLayer();
@@ -655,7 +685,7 @@ function selectFeatureById(id, flyTo = false) {
   if (feature && flyTo && state.view === 'map') {
     map.flyTo({
       center: feature.geometry.coordinates,
-      zoom: Math.max(map.getZoom(), 16.5),
+      zoom: Math.max(map.getZoom(), 16),
       speed: 0.72,
       curve: 1.15,
       essential: true,
@@ -670,9 +700,9 @@ function fitToVisible() {
     bounds.extend(feature.geometry.coordinates);
   }
 
-  const leftPad = window.innerWidth < 860 ? 30 : 440;
+  const leftPad = window.innerWidth < 980 ? 20 : 430;
   map.fitBounds(bounds, {
-    padding: { top: 100, right: 100, bottom: 100, left: leftPad },
+    padding: { top: 80, right: 80, bottom: 80, left: leftPad },
     duration: 850,
     maxZoom: 16,
   });
@@ -680,24 +710,19 @@ function fitToVisible() {
 
 function setView(view) {
   state.view = view;
+  const mapVisible = view === 'map';
 
-  const buttons = viewSwitch.querySelectorAll('.view-btn');
-  for (const button of buttons) {
+  for (const button of viewSwitch.querySelectorAll('.view-btn')) {
     button.classList.toggle('active', button.dataset.view === view);
   }
 
-  const mapVisible = view === 'map';
-  document.querySelector('#map').classList.toggle('hidden', !mapVisible);
-  document.querySelector('.dot-grid').classList.toggle('hidden', !mapVisible);
+  mapContainer.classList.toggle('hidden', !mapVisible);
   detailCard.classList.toggle('hidden', !mapVisible || !state.selectedId);
   trendsView.classList.toggle('hidden', mapVisible);
   styleToggle.disabled = !mapVisible;
   styleToggle.classList.toggle('disabled', !mapVisible);
 
-  if (mapVisible) {
-    setTimeout(() => map.resize(), 120);
-  }
-
+  if (mapVisible) setTimeout(() => map.resize(), 120);
   syncDetailCard();
 }
 
@@ -717,6 +742,11 @@ function wireInputs() {
     applyFilters();
   });
 
+  heritageGradeFilter.addEventListener('change', (event) => {
+    state.heritageGrade = event.target.value;
+    applyFilters();
+  });
+
   siteList.addEventListener('click', (event) => {
     const button = event.target.closest('button[data-id]');
     if (!button) return;
@@ -724,12 +754,14 @@ function wireInputs() {
   });
 
   styleToggle.addEventListener('click', () => {
-    state.styleKey = state.styleKey === 'dark' ? 'satellite' : 'dark';
-    styleToggle.textContent = state.styleKey === 'dark' ? 'Satellite' : 'Dark';
+    const currentIndex = styleOrder.indexOf(state.styleKey);
+    state.styleKey = styleOrder[(currentIndex + 1) % styleOrder.length];
+    updateStyleToggleLabel();
 
     map.setStyle(styles[state.styleKey]);
     map.once('style.load', () => {
       addDataLayers();
+      applyMapPresentation();
       updateSourceData();
       updateSelectedLayer();
     });
@@ -746,13 +778,17 @@ async function init() {
   await loadData();
   fillFilter(usageFilter, getUniqueValues('usage'));
   fillFilter(zoningFilter, getUniqueValues('zoning'));
+  fillFilter(heritageGradeFilter, getUniqueValues('heritageCityGrade'));
   wireInputs();
 
   map.on('load', () => {
     addDataLayers();
+    applyMapPresentation();
     applyFilters();
     fitToVisible();
-    setView('map');
+    const defaultView = window.innerWidth < 980 ? 'trends' : 'map';
+    updateStyleToggleLabel();
+    setView(defaultView);
   });
 }
 
