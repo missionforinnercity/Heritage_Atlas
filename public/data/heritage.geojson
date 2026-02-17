@@ -1,0 +1,634 @@
+{
+  "type": "FeatureCollection",
+  "generatedAt": "2026-02-17T11:40:10.122Z",
+  "sourceWorkbook": "Heritage%20Stock_UPDATED_with_CMA_ROWS1-7_FILLED.xlsx",
+  "totalRows": 26,
+  "skippedRows": 1,
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          18.41922,
+          -33.921542
+        ]
+      },
+      "properties": {
+        "id": "1",
+        "name": "Cadiz",
+        "address": "77 Loop Street",
+        "erfNo": "2251",
+        "erfSize": "231",
+        "estValue": "R7,000,000 – R10,500,000",
+        "zoning": "MU3",
+        "usage": "Business / Commercial",
+        "owner": "FREITAS MARIA JOSE",
+        "significance": "High profile historical precinct; Edwardian façade; on Historic Slave Route; formerly P&H Billiards (1885)",
+        "cmaGps": "18.41922°E, 33.921542°S",
+        "cmaMunicipalValue2023": "R 7,000,000",
+        "cmaRatesEstimate": "R 9,814 / month"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          18.421037,
+          -33.920968
+        ]
+      },
+      "properties": {
+        "id": "2",
+        "name": "Skyy Lounge",
+        "address": "33 Long Street",
+        "erfNo": "4194",
+        "erfSize": "93",
+        "estValue": "R5,900,000 – R8,850,000",
+        "zoning": "GB7",
+        "usage": "Business / Commercial",
+        "owner": "SPORT 'N SURF A REAL SURF STORE C C",
+        "significance": "Housed HC Collison Ltd (Est. 1815); construction date 1880; charming Victorian; formerly Foley’s Rest & Boarding House (1885)",
+        "cmaGps": "18.421037°E, 33.920968°S",
+        "cmaMunicipalValue2023": "R 5,900,000",
+        "cmaRatesEstimate": "R 8,271.80 / month"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          18.419252,
+          -33.921488
+        ]
+      },
+      "properties": {
+        "id": "3",
+        "name": "Ali’s Hookah",
+        "address": "75 Loop Street",
+        "erfNo": "2252",
+        "erfSize": "78",
+        "estValue": "R4,200,000 – R6,300,000",
+        "zoning": "MU3",
+        "usage": "Business / Commercial",
+        "owner": "HERMITAGE FINANCIAL BROKERS C C",
+        "significance": "Part of vibrant heritage corridor; Edwardian example",
+        "cmaGps": "18.419252°E, 33.921488°S",
+        "cmaMunicipalValue2023": "R 4,200,000",
+        "cmaRatesEstimate": "R 5,888.40 / month"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          18.418441,
+          -33.922285
+        ]
+      },
+      "properties": {
+        "id": "4",
+        "name": "Tobacco Mini Market",
+        "address": "93 Loop Street",
+        "erfNo": "2538",
+        "erfSize": "453",
+        "estValue": "R12,800,000 – R19,200,000",
+        "zoning": "MU3",
+        "usage": "Business / Commercial",
+        "owner": "ATENA GENERAL TRADING PTY LTD",
+        "significance": "Former boarding house; built 1880",
+        "cmaGps": "18.418441°E, 33.922285°S",
+        "cmaMunicipalValue2023": "",
+        "cmaRatesEstimate": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          18.418417,
+          -33.922372
+        ]
+      },
+      "properties": {
+        "id": "5",
+        "name": "J&M Cleaning",
+        "address": "95 Loop Street",
+        "erfNo": "2536",
+        "erfSize": "229",
+        "estValue": "R6,000,000 – R9,000,000",
+        "zoning": "MU3",
+        "usage": "Business / Commercial",
+        "owner": "MOORE MICHAEL CHARLES HERBERT",
+        "significance": "Former Vaudeville Music Hall; built 1897; late Victorian–Edwardian period",
+        "cmaGps": "18.418417°E, 33.922372°S",
+        "cmaMunicipalValue2023": "R 5,930,000",
+        "cmaRatesEstimate": "R 8,313.86 / month"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          18.418364,
+          -33.922423
+        ]
+      },
+      "properties": {
+        "id": "5 (alt)",
+        "name": "IMB Office",
+        "address": "97 Loop Street",
+        "erfNo": "2535",
+        "erfSize": "232",
+        "estValue": "R12,00,000 – R18,000,000",
+        "zoning": "MU3",
+        "usage": "Business / Commercial",
+        "owner": "DIPPOLDESWALDE PROP PTY LTD",
+        "significance": "(Significance listed with item 5 on the page)",
+        "cmaGps": "18.418364°E, 33.922423°S",
+        "cmaMunicipalValue2023": "R 12,000,000",
+        "cmaRatesEstimate": "R 16,824 / month"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          18.417384,
+          -33.922739
+        ]
+      },
+      "properties": {
+        "id": "6",
+        "name": "Betolimp",
+        "address": "120 Loop Street",
+        "erfNo": "159428",
+        "erfSize": "256",
+        "estValue": "R14,800,000 – R22,200,000",
+        "zoning": "MU3",
+        "usage": "Tourism & Hospitality",
+        "owner": "KAIRAT PROP PTY LTD",
+        "significance": "Victorian façade; formerly Hotel Germania; historic filigree",
+        "cmaGps": "18.417384°E, 33.922739°S",
+        "cmaMunicipalValue2023": "R 14,780,000",
+        "cmaRatesEstimate": "R 20,721.56 / month"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          18.41717,
+          -33.923615
+        ]
+      },
+      "properties": {
+        "id": "8",
+        "name": "ATTA",
+        "address": "14 Dorp St",
+        "erfNo": "2360",
+        "erfSize": "227",
+        "estValue": "R6,750,000 – R10,125,000",
+        "zoning": "MU3",
+        "usage": "Business / Commercial",
+        "owner": "Majestic Promotions Pty Ltd",
+        "significance": "(No significance text shown for this entry on the page)",
+        "cmaGps": "18.41717E, 33.923615S",
+        "cmaMunicipalValue2023": "R 6,750,000",
+        "cmaRatesEstimate": "R 9,463.50 / month"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          18.417355,
+          -33.923672
+        ]
+      },
+      "properties": {
+        "id": "9",
+        "name": "10 Dorp Street",
+        "address": "10 Dorp St",
+        "erfNo": "8398 / 8399",
+        "erfSize": "461 + 127",
+        "estValue": "R12,00,000 – R18,000,000",
+        "zoning": "GB7",
+        "usage": "Business / Commercial",
+        "owner": "Majestic Promotions Pty Ltd",
+        "significance": "(No significance text shown for this entry on the page)",
+        "cmaGps": "18.417355E, 33.923672S",
+        "cmaMunicipalValue2023": "R 12,000,000",
+        "cmaRatesEstimate": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          18.418309,
+          -33.922521
+        ]
+      },
+      "properties": {
+        "id": "10",
+        "name": "Bebe Lodge",
+        "address": "78 Church St",
+        "erfNo": "2555",
+        "erfSize": "130",
+        "estValue": "R6,900,000 – R10,350,000",
+        "zoning": "MU3",
+        "usage": "Shop / Retail",
+        "owner": "Barbara Vollmer Family Trust",
+        "significance": "Victorian/Edwardian era building; historically rich precinct",
+        "cmaGps": "18.418309E, 33.922521S",
+        "cmaMunicipalValue2023": "R 6,900,000",
+        "cmaRatesEstimate": "R 9,673.80 / month"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          18.419084,
+          -33.922242
+        ]
+      },
+      "properties": {
+        "id": "11",
+        "name": "Elly Lodge",
+        "address": "146 Longmarket St",
+        "erfNo": "2226",
+        "erfSize": "78",
+        "estValue": "R2,900,000 – R4,350,000",
+        "zoning": "GB7",
+        "usage": "Tourism & Hospitality",
+        "owner": "Tresso Trading 141 Pty Ltd",
+        "significance": "Late Victorian era; formerly Delville House (1936)",
+        "cmaGps": "18.419084E, 33.922242S",
+        "cmaMunicipalValue2023": "R 2,930,000",
+        "cmaRatesEstimate": "R 4,107.86 / month"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          18.419145,
+          -33.922233
+        ]
+      },
+      "properties": {
+        "id": "12",
+        "name": "Gold on Long",
+        "address": "84 Long St",
+        "erfNo": "160499",
+        "erfSize": "213",
+        "estValue": "R6,400,000 – R9,600,000",
+        "zoning": "GB7",
+        "usage": "Business / Commercial",
+        "owner": "Shap Prop Pty Ltd",
+        "significance": "Rare surviving Art Deco commercial structure (built 1935); vertical linear ornamentation; historic wrought-iron railing",
+        "cmaGps": "18.419145E, 33.922233S",
+        "cmaMunicipalValue2023": "R 6,400,000",
+        "cmaRatesEstimate": "R 8,972.80 / month"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          18.418936,
+          -33.922417
+        ]
+      },
+      "properties": {
+        "id": "13",
+        "name": "Phoenix Lounge",
+        "address": "92 Long St",
+        "erfNo": "2547",
+        "erfSize": "293",
+        "estValue": "R9,600,000 – R14,400,000",
+        "zoning": "GB7",
+        "usage": "Tourism & Hospitality",
+        "owner": "Daveglen 546 Inv Pty Ltd",
+        "significance": "Edwardian corner building; historic turret",
+        "cmaGps": "18.418936E, 33.922417S",
+        "cmaMunicipalValue2023": "R 9,590,000",
+        "cmaRatesEstimate": "R 13,445.18 / month"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          18.419063,
+          -33.922823
+        ]
+      },
+      "properties": {
+        "id": "14",
+        "name": "African Treasure",
+        "address": "107 Long St",
+        "erfNo": "2461",
+        "erfSize": "401",
+        "estValue": "R11,500,000 – R17,250,000",
+        "zoning": "GB7",
+        "usage": "Business / Commercial",
+        "owner": "Joyce Hyde Pty Ltd / EDMS BPK",
+        "significance": "Built 1860; elaborate cornice; Victorian commercial architecture; decorative plaster work",
+        "cmaGps": "18.419063E, 33.922823S",
+        "cmaMunicipalValue2023": "R 11,500,000",
+        "cmaRatesEstimate": "R 16,123 / month"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          18.418858,
+          -33.922917
+        ]
+      },
+      "properties": {
+        "id": "15",
+        "name": "Windsor House",
+        "address": "113 Long & Church",
+        "erfNo": "2460",
+        "erfSize": "179",
+        "estValue": "R8,000,000 – R12,000,000",
+        "zoning": "GB7",
+        "usage": "Business / Commercial",
+        "owner": "Windchurch Prop Pty Ltd",
+        "significance": "Elegant Edwardian façade; built 1859; second floor added 1922; start of antique alley",
+        "cmaGps": "18.418858E, 33.922917S",
+        "cmaMunicipalValue2023": "R 8,000,000",
+        "cmaRatesEstimate": "R 11,216 / month"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          18.418627,
+          -33.923162
+        ]
+      },
+      "properties": {
+        "id": "16",
+        "name": "121 Long Salon",
+        "address": "121 Long St",
+        "erfNo": "2498",
+        "erfSize": "64",
+        "estValue": "R6,000,000 – R9,000,000",
+        "zoning": "GB7",
+        "usage": "Business / Commercial",
+        "owner": "Naro Blumenfabrik Pty Ltd",
+        "significance": "Designed in 1899 by architect William Black; impressive double-storey Victorian façade; corrugated iron canopy",
+        "cmaGps": "18.418627E, 33.923162S",
+        "cmaMunicipalValue2023": "",
+        "cmaRatesEstimate": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          18.418411,
+          -33.922888
+        ]
+      },
+      "properties": {
+        "id": "17",
+        "name": "City Spa",
+        "address": "108 Long St",
+        "erfNo": "2593",
+        "erfSize": "192",
+        "estValue": "R9,350,000 – R14,025,000",
+        "zoning": "GB7",
+        "usage": "Business / Commercial",
+        "owner": "Eliangexi Inv Pty Ltd",
+        "significance": "Scott House (formerly Johannesburg Hotel); Art Deco gem; built 1930s",
+        "cmaGps": "18.418411E, 33.922888S",
+        "cmaMunicipalValue2023": "R 9,350,000",
+        "cmaRatesEstimate": "R 13,108.70 / month"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          18.419655,
+          -33.922217
+        ]
+      },
+      "properties": {
+        "id": "18",
+        "name": "Purple Turtle",
+        "address": "85 Shortmarket St",
+        "erfNo": "2355",
+        "erfSize": "316",
+        "estValue": "R15,500,000 – R18,000,000",
+        "zoning": "GB7",
+        "usage": "Shop / Retail",
+        "owner": "Ellie Geva Enterprises C C",
+        "significance": "Designed in 1901 by Architects Parker & Forsyth; completed 1902; historical weather vane",
+        "cmaGps": "18.419655E, 33.922217S",
+        "cmaMunicipalValue2023": "R 10,420,000",
+        "cmaRatesEstimate": "R 14,608.84 / month"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          18.4192,
+          -33.920962
+        ]
+      },
+      "properties": {
+        "id": "19",
+        "name": "Architect Assoc.",
+        "address": "71 Hout St",
+        "erfNo": "2159",
+        "erfSize": "174",
+        "estValue": "R10,000,000 – R11,000,000",
+        "zoning": "MU3",
+        "usage": "Business / Commercial",
+        "owner": "Hout Boutique Prop Pty Ltd",
+        "significance": "Standalone heritage masterpiece; built 1898; late Victorian / early Edwardian",
+        "cmaGps": "18.4192E, 33.920962S",
+        "cmaMunicipalValue2023": "R 5,000,000",
+        "cmaRatesEstimate": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          18.420396,
+          -33.921529
+        ]
+      },
+      "properties": {
+        "id": "20",
+        "name": "Langham House",
+        "address": "59 Long St",
+        "erfNo": "4159",
+        "erfSize": "148 + 30 + 12",
+        "estValue": "R10,280,000 – R15,420,000",
+        "zoning": "GB7",
+        "usage": "Business / Commercial",
+        "owner": "Nieuwenhuysen Maurits Ernest Van-Trustees",
+        "significance": "Former Langman Hotel; built 1941; original ERF granted 1698 (Simon van der Stel)",
+        "cmaGps": "18.420396E, 33.921529S",
+        "cmaMunicipalValue2023": "",
+        "cmaRatesEstimate": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          18.420989,
+          -33.921006
+        ]
+      },
+      "properties": {
+        "id": "21",
+        "name": "Noble VIP Lounge",
+        "address": "35 Long St",
+        "erfNo": "4193",
+        "erfSize": "94",
+        "estValue": "R5,800,000 – R8,300,000",
+        "zoning": "GB7",
+        "usage": "Business / Commercial",
+        "owner": "I Kesler C C",
+        "significance": "3-storey Victorian-era building; built 1850s; wrought-iron balcony detail",
+        "cmaGps": "18.420989E, 33.921006S",
+        "cmaMunicipalValue2023": "R 5,800,000",
+        "cmaRatesEstimate": "R 8,131.60 / month"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          18.42092,
+          -33.92107
+        ]
+      },
+      "properties": {
+        "id": "21 (paired)",
+        "name": "Cash for Gold",
+        "address": "39 Castle Street",
+        "erfNo": "4192",
+        "erfSize": "192",
+        "estValue": "R5,740,000 – R8,610,000",
+        "zoning": "GB7",
+        "usage": "Business / Commercial",
+        "owner": "I Kesler C C",
+        "significance": "(Significance listed with item 21 on the page)",
+        "cmaGps": "18.42092E, 33.92107S",
+        "cmaMunicipalValue2023": "R 5,740,000",
+        "cmaRatesEstimate": "R 8,047.48 / month"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          18.420608,
+          -33.921625
+        ]
+      },
+      "properties": {
+        "id": "22",
+        "name": "Castle Backpackers",
+        "address": "48 Hout Street",
+        "erfNo": "4172",
+        "erfSize": "199",
+        "estValue": "R8,000,00 – R10,000,000",
+        "zoning": "GB7",
+        "usage": "General Residential (Flats / Hostel / Barracks)",
+        "owner": "Trymore Inv 2 C C",
+        "significance": "Originally built late 1800s, updated 1902; historic wrap-around balcony; cast-iron balcony and sash windows",
+        "cmaGps": "18.420608E, 33.921625S",
+        "cmaMunicipalValue2023": "R 10,000,000",
+        "cmaRatesEstimate": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          18.42057,
+          -33.921565
+        ]
+      },
+      "properties": {
+        "id": "23",
+        "name": "Plaster Art",
+        "address": "50 Hout Street",
+        "erfNo": "4173",
+        "erfSize": "149",
+        "estValue": "R5,000,000 – R7,500,000",
+        "zoning": "GB7",
+        "usage": "Shop / Retail",
+        "owner": "Plaster Art C C",
+        "significance": "Victorian/Edwardian; classic window rhythm and ornate detailing",
+        "cmaGps": "18.42057E, 33.921565S",
+        "cmaMunicipalValue2023": "R 5,000,000",
+        "cmaRatesEstimate": "R 7,010 / month"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          18.420497,
+          -33.921561
+        ]
+      },
+      "properties": {
+        "id": "24",
+        "name": "Caldis House",
+        "address": "52 Hout Street",
+        "erfNo": "4175 / 4161",
+        "erfSize": "114 + 177",
+        "estValue": "R9,570,000 – R14,355,000",
+        "zoning": "GB7",
+        "usage": "Business / Commercial",
+        "owner": "M E Caldis Pty Ltd",
+        "significance": "Late Victorian / early Edwardian; decorative historic balcony; ornate parapets",
+        "cmaGps": "18.420497E, 33.921561S",
+        "cmaMunicipalValue2023": "R 9,570,000",
+        "cmaRatesEstimate": ""
+      }
+    }
+  ]
+}
