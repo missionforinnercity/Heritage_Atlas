@@ -3,6 +3,7 @@ import 'mapbox-gl/dist/mapbox-gl.css';
 import './style.css';
 
 const token = import.meta.env.VITE_MAPBOX_TOKEN;
+const googleStreetViewKey = import.meta.env.VITE_GOOGLE_STREETVIEW_API_KEY || '';
 if (!token) {
   throw new Error('Missing VITE_MAPBOX_TOKEN. Add it to .env.local before running the app.');
 }
@@ -228,6 +229,29 @@ function formatNumber(value, digits = 0) {
 
 function keyForOverride(name, address) {
   return `${normalize(name)}|${normalize(address)}`;
+}
+
+function streetViewStaticUrl(lat, lon) {
+  if (!googleStreetViewKey) return '';
+  const base = 'https://maps.googleapis.com/maps/api/streetview';
+  const params = new URLSearchParams({
+    size: '900x420',
+    location: `${lat},${lon}`,
+    fov: '80',
+    pitch: '0',
+    source: 'outdoor',
+    key: googleStreetViewKey,
+  });
+  return `${base}?${params.toString()}`;
+}
+
+function streetViewOpenUrl(lat, lon) {
+  const params = new URLSearchParams({
+    api: '1',
+    map_action: 'pano',
+    viewpoint: `${lat},${lon}`,
+  });
+  return `https://www.google.com/maps/@?${params.toString()}`;
 }
 
 function currentCollection() {
@@ -652,10 +676,23 @@ function syncDetailCard() {
   }
 
   const p = feature.properties;
+  const [lon, lat] = feature.geometry.coordinates;
+  const streetViewImage = streetViewStaticUrl(lat, lon);
+  const streetViewLink = streetViewOpenUrl(lat, lon);
+  const streetViewBlock = googleStreetViewKey
+    ? `
+      <div class="streetview-block">
+        <img class="streetview-image" src="${streetViewImage}" alt="Street View facade preview for ${p.name || 'site'}" loading="lazy" referrerpolicy="no-referrer-when-downgrade" />
+        <a class="streetview-link" href="${streetViewLink}" target="_blank" rel="noreferrer">Open Street View</a>
+      </div>
+    `
+    : `<p class="streetview-missing">Street View key not configured.</p>`;
+
   detailCard.classList.remove('hidden');
   detailCard.innerHTML = `
     <h2>${p.name || 'Unnamed site'}</h2>
     <p class="address">${p.address || 'No address listed'}</p>
+    ${streetViewBlock}
     <dl>
       <div><dt>Usage</dt><dd>${p.usage || 'N/A'}</dd></div>
       <div><dt>Zoning</dt><dd>${p.zoning || 'N/A'}</dd></div>

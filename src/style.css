@@ -429,6 +429,40 @@ th {
   font-size: 16px;
 }
 
+.streetview-block {
+  margin: 0 0 14px;
+  display: grid;
+  gap: 8px;
+}
+
+.streetview-image {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+  border: 2px solid var(--ink);
+  border-radius: 18px;
+  background: #d6d6da;
+}
+
+.streetview-link {
+  display: inline-block;
+  width: fit-content;
+  border: 2px solid var(--ink);
+  border-radius: var(--radius-pill);
+  padding: 6px 12px;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--ink);
+  text-decoration: none;
+  background: var(--paper);
+}
+
+.streetview-missing {
+  margin: 0 0 14px;
+  font-size: 13px;
+  color: var(--vapor);
+}
+
 .detail-card dl {
   margin: 0 0 14px;
   display: grid;
