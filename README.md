@@ -1,6 +1,6 @@
 ﻿# Heritage Stock Atlas
 
-Swiss-style Mapbox visualization for `Heritage%20Stock_UPDATED_with_CMA_ROWS1-7_FILLED.xlsx`.
+Mapbox visualization of selected heritage building stock in Cape Town CBD. The selected buildings offer high value potential if upgraded and properly tenanted. 
 
 ## Setup
 
