@@ -3,7 +3,8 @@ import 'mapbox-gl/dist/mapbox-gl.css';
 import './style.css';
 
 const token = import.meta.env.VITE_MAPBOX_TOKEN;
-const googleStreetViewKey = import.meta.env.VITE_GOOGLE_STREETVIEW_API_KEY || '';
+const streetViewProxyBase = (import.meta.env.VITE_STREETVIEW_PROXY_BASE || '').trim();
+const streetViewApiKey = (import.meta.env.VITE_STREETVIEW_API_KEY || '').trim();
 if (!token) {
   throw new Error('Missing VITE_MAPBOX_TOKEN. Add it to .env.local before running the app.');
 }
@@ -148,7 +149,9 @@ map.addControl(new mapboxgl.NavigationControl({ visualizePitch: true }), 'bottom
 map.addControl(new mapboxgl.AttributionControl({ compact: true }), 'bottom-left');
 
 async function loadData() {
-  const response = await fetch(`/data/heritage.geojson?t=${Date.now()}`, { cache: 'no-store' });
+  const response = await fetch(`${import.meta.env.BASE_URL}data/heritage.geojson?t=${Date.now()}`, {
+    cache: 'no-store',
+  });
   if (!response.ok) throw new Error('Could not load heritage.geojson');
   state.data = await response.json();
 }
@@ -232,17 +235,25 @@ function keyForOverride(name, address) {
 }
 
 function streetViewStaticUrl(lat, lon) {
-  if (!googleStreetViewKey) return '';
-  const base = 'https://maps.googleapis.com/maps/api/streetview';
+  if (!streetViewProxyBase && !streetViewApiKey) return '';
+
   const params = new URLSearchParams({
     size: '900x420',
-    location: `${lat},${lon}`,
     fov: '80',
     pitch: '0',
     source: 'outdoor',
-    key: googleStreetViewKey,
   });
-  return `${base}?${params.toString()}`;
+
+  if (streetViewProxyBase) {
+    params.set('lat', String(lat));
+    params.set('lon', String(lon));
+    const separator = streetViewProxyBase.includes('?') ? '&' : '?';
+    return `${streetViewProxyBase}${separator}${params.toString()}`;
+  }
+
+  params.set('location', `${lat},${lon}`);
+  params.set('key', streetViewApiKey);
+  return `https://maps.googleapis.com/maps/api/streetview?${params.toString()}`;
 }
 
 function streetViewOpenUrl(lat, lon) {
@@ -679,14 +690,14 @@ function syncDetailCard() {
   const [lon, lat] = feature.geometry.coordinates;
   const streetViewImage = streetViewStaticUrl(lat, lon);
   const streetViewLink = streetViewOpenUrl(lat, lon);
-  const streetViewBlock = googleStreetViewKey
+  const streetViewBlock = streetViewImage
     ? `
       <div class="streetview-block">
         <img class="streetview-image" src="${streetViewImage}" alt="Street View facade preview for ${p.name || 'site'}" loading="lazy" referrerpolicy="no-referrer-when-downgrade" />
         <a class="streetview-link" href="${streetViewLink}" target="_blank" rel="noreferrer">Open Street View</a>
       </div>
     `
-    : `<p class="streetview-missing">Street View key not configured.</p>`;
+    : `<p class="streetview-missing">Street View proxy not configured.</p>`;
 
   detailCard.classList.remove('hidden');
   detailCard.innerHTML = `
